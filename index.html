@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCIP-omon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+      --space-2: 0.5rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-12: 3rem;
+      --space-16: 4rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+      --color-bg: #f7f6f2;
+      --color-surface: rgba(255,255,255,0.72);
+      --color-border: rgba(40,37,29,0.12);
+      --color-text: #28251d;
+      --color-text-muted: #6f6b64;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-secondary: #ffffff;
+      --shadow-lg: 0 18px 40px rgba(30, 26, 20, 0.12);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at top left, rgba(1,105,111,0.16), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(1,105,111,0.12), transparent 30%),
+        linear-gradient(180deg, #fbfaf7 0%, var(--color-bg) 100%);
+      display: grid;
+      place-items: center;
+      padding: var(--space-6);
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+    }
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      background: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      z-index: 100;
+    }
+
+    .shell {
+      width: min(100%, 920px);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 1.5rem;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: clamp(2rem, 5vw, 5rem);
+      text-align: center;
+      display: grid;
+      gap: var(--space-6);
+    }
+
+    .logo-wrap {
+      display: inline-flex;
+      margin: 0 auto;
+      align-items: center;
+      gap: 0.85rem;
+      padding: 0.85rem 1.2rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      background: rgba(255,255,255,0.72);
+    }
+
+    .logo-mark {
+      width: 42px;
+      height: 42px;
+      color: var(--color-primary);
+    }
+
+    .eyebrow {
+      font-size: var(--text-sm);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      font-weight: 700;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      line-height: 1.05;
+      max-width: 12ch;
+      margin: 0 auto;
+    }
+
+    .lead {
+      color: var(--color-text-muted);
+      max-width: 52ch;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-4);
+      margin-top: var(--space-2);
+    }
+
+    .button {
+      min-width: 170px;
+      min-height: 52px;
+      padding: 0.95rem 1.35rem;
+      border-radius: var(--radius-full);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: var(--text-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+      border: 1px solid transparent;
+    }
+
+    .button.primary {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 10px 24px rgba(1,105,111,0.22);
+    }
+
+    .button.primary:hover,
+    .button.primary:focus-visible {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.88);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      transform: translateY(-2px);
+      background: #ffffff;
+    }
+
+    .footer-note {
+      border-top: 1px solid var(--color-border);
+      padding: 1rem 1.5rem;
+      text-align: center;
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+      background: rgba(255,255,255,0.45);
+    }
+
+    .button:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 560px) {
+      .actions {
+        flex-direction: column;
+      }
+      .button {
+        width: 100%;
+      }
+      h1 {
+        max-width: 10ch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Saltar para o conteúdo</a>
+
+  <main id="conteudo" class="shell">
+    <section class="hero" aria-labelledby="titulo-principal">
+      <div class="logo-wrap" aria-label="Logótipo UCIP-omon">
+        <svg class="logo-mark" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+          <rect x="6" y="10" width="52" height="44" rx="16" stroke="currentColor" stroke-width="4"/>
+          <path d="M20 32H28L32 22L36 42L40 32H48" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <div class="eyebrow">Bem-vindo</div>
+          <strong>UCIP-omon</strong>
+        </div>
+      </div>
+
+      <div>
+        <p class="eyebrow">Portal inicial</p>
+        <h1 id="titulo-principal">Boas-vindas ao UCIP-omon</h1>
+      </div>
+
+      <p class="lead">Escolhe abaixo a área que queres explorar. Preparei uma página simples, limpa e rápida, com acesso direto a BD e Caricaturas.</p>
+
+      <nav class="actions" aria-label="Ligações principais">
+        <a class="button primary" href="#bd">Entrar em BD</a>
+        <a class="button secondary" href="#caricaturas">Ver Caricaturas</a>
+      </nav>
+    </section>
+
+    <div class="footer-note">UCIP-omon · acesso rápido às áreas principais</div>
+  </main>
+</body>
+</html>
