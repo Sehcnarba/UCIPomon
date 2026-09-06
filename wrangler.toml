@@ -1,0 +1,30 @@
+name = "ucipomon"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+
+# Ficheiros estáticos (páginas do site) servidos diretamente pelo Cloudflare.
+# Qualquer pedido que corresponda a um ficheiro em ./public é servido sem passar
+# pelo Worker; só os pedidos a /api/* (que não existem como ficheiro) chegam ao
+# código em src/worker.js.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# Base de dados D1 (metadados: nomes, aliases, definições).
+# Substituir "PREENCHER_DEPOIS_DE_CRIAR" pelo database_id devolvido por:
+#   wrangler d1 create ucipomon
+[[d1_databases]]
+binding = "DB"
+database_name = "ucipomon"
+database_id = "8c858c42-3c72-4ad3-a3e9-cb6a7709c92b"
+
+# Bucket R2 (armazenamento das imagens).
+# Criar antes com:
+#   wrangler r2 bucket create ucipomon-images
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "ucipomon-images"
+
+# ATENÇÃO: a password de admin (ADMIN_PASSWORD) NÃO se define aqui.
+# É um secret, definido uma única vez com:
+#   wrangler secret put ADMIN_PASSWORD

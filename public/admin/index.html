@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCIP-omon · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.4rem, 1.2rem + 1vw, 2rem);
+      --space-2: 0.5rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+      --color-bg: #f7f6f2;
+      --color-surface: rgba(255,255,255,0.72);
+      --color-surface-solid: #ffffff;
+      --color-border: rgba(40,37,29,0.12);
+      --color-text: #28251d;
+      --color-text-muted: #6f6b64;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-error: #a3312a;
+      --color-error-bg: rgba(163,49,42,0.08);
+      --color-success: #1a7a3d;
+      --color-success-bg: rgba(26,122,61,0.10);
+      --shadow-lg: 0 18px 40px rgba(30, 26, 20, 0.12);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at top left, rgba(1,105,111,0.16), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(1,105,111,0.12), transparent 30%),
+        linear-gradient(180deg, #fbfaf7 0%, var(--color-bg) 100%);
+      padding: var(--space-6);
+    }
+
+    .wrap {
+      width: min(100%, 880px);
+      margin: 0 auto;
+      display: grid;
+      gap: var(--space-6);
+    }
+
+    header.top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+
+    header.top a.home {
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: 600;
+    }
+    header.top a.home:hover, header.top a.home:focus-visible { color: var(--color-primary); }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-xl);
+    }
+
+    .card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-lg);
+      padding: var(--space-6);
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    .card h2 {
+      font-family: var(--font-display);
+      font-size: var(--text-lg);
+    }
+
+    label {
+      font-weight: 600;
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      display: block;
+      margin-bottom: 0.35rem;
+    }
+
+    input[type="text"], input[type="password"], input[type="number"] {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border);
+      background: #fff;
+      color: var(--color-text);
+    }
+    input:focus { outline: none; border-color: var(--color-primary); }
+
+    .button {
+      min-height: 46px;
+      padding: 0.7rem 1.2rem;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 160ms ease, background-color 160ms ease;
+      font-family: var(--font-body);
+    }
+    .button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .button.primary { background: var(--color-primary); color: #fff; }
+    .button.primary:hover:not(:disabled) { background: var(--color-primary-hover); transform: translateY(-1px); }
+    .button.secondary { background: #fff; color: var(--color-text); border-color: var(--color-border); }
+    .button.secondary:hover:not(:disabled) { transform: translateY(-1px); }
+    .button.danger { background: var(--color-error-bg); color: var(--color-error); }
+    .button.danger:hover:not(:disabled) { background: rgba(163,49,42,0.16); }
+    .button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+
+    .dropzone {
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-8);
+      text-align: center;
+      color: var(--color-text-muted);
+      cursor: pointer;
+      transition: border-color 160ms ease, background-color 160ms ease;
+      display: grid;
+      gap: 0.5rem;
+      justify-items: center;
+    }
+    .dropzone.dragover {
+      border-color: var(--color-primary);
+      background: rgba(1,105,111,0.06);
+    }
+    .dropzone img {
+      max-width: 160px;
+      max-height: 160px;
+      border-radius: var(--radius-md);
+      object-fit: contain;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    .inline-fields {
+      display: grid;
+      gap: var(--space-4);
+      grid-template-columns: 1fr 1fr;
+    }
+    @media (max-width: 560px) {
+      .inline-fields { grid-template-columns: 1fr; }
+    }
+
+    .message {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      padding: 0.6rem 0.9rem;
+      border-radius: var(--radius-md);
+      display: none;
+    }
+    .message.show { display: block; }
+    .message.success { background: var(--color-success-bg); color: var(--color-success); }
+    .message.error { background: var(--color-error-bg); color: var(--color-error); }
+
+    .people-list {
+      display: grid;
+      gap: var(--space-2);
+    }
+
+    .person-row {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: var(--space-4);
+      padding: 0.6rem;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.6);
+    }
+
+    .person-row img {
+      width: 56px;
+      height: 56px;
+      border-radius: 0.5rem;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .person-info { display: grid; gap: 0.2rem; }
+    .person-name-input { font-weight: 700; margin-bottom: 0.3rem; }
+    .person-aliases-input { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+    .person-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .empty-note {
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+      text-align: center;
+      padding: var(--space-4);
+    }
+
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <a class="home" href="/">&larr; Início</a>
+      <button class="button secondary" id="logoutButton" hidden>Sair</button>
+    </header>
+
+    <section class="card" id="loginCard">
+      <h1>Admin — UCIP-omon</h1>
+      <p style="color: var(--color-text-muted);">Introduz a password de admin para gerir as caricaturas.</p>
+      <form class="form-grid" id="loginForm">
+        <div>
+          <label for="passwordInput">Password</label>
+          <input type="password" id="passwordInput" autocomplete="current-password" required />
+        </div>
+        <div class="message error" id="loginMessage"></div>
+        <button type="submit" class="button primary" id="loginButton">Entrar</button>
+      </form>
+    </section>
+
+    <div id="adminArea" hidden style="display: grid; gap: var(--space-6);">
+      <section class="card">
+        <h2>Definições do jogo</h2>
+        <div class="inline-fields">
+          <div>
+            <label for="questionsPerRound">Perguntas por jogo</label>
+            <input type="number" id="questionsPerRound" min="1" step="1" />
+          </div>
+          <div style="align-self: end;">
+            <button type="button" class="button secondary" id="saveSettingsButton">Guardar definição</button>
+          </div>
+        </div>
+        <div class="message" id="settingsMessage"></div>
+      </section>
+
+      <section class="card">
+        <h2>Adicionar novo UCIPomon</h2>
+        <form class="form-grid" id="addForm">
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Escolher ou arrastar uma imagem">
+            <img id="previewImage" hidden alt="Pré-visualização" />
+            <span id="dropzoneLabel">Arrasta uma imagem para aqui, ou clica para escolher</span>
+            <input type="file" id="fileInput" accept="image/*" hidden />
+          </div>
+
+          <div class="inline-fields">
+            <div>
+              <label for="displayNameInput">Nome a mostrar</label>
+              <input type="text" id="displayNameInput" placeholder="Ex: João Abranches" required />
+            </div>
+            <div>
+              <label for="aliasesInput">Também aceitar (separado por vírgulas)</label>
+              <input type="text" id="aliasesInput" placeholder="Ex: Teimosão, João" />
+            </div>
+          </div>
+
+          <div class="message" id="addMessage"></div>
+          <button type="submit" class="button primary" id="addButton">Adicionar</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>UCIPomons existentes (<span id="peopleCount">0</span>)</h2>
+        <div class="people-list" id="peopleList"></div>
+        <p class="empty-note" id="peopleEmptyNote" hidden>Ainda não há ninguém adicionado.</p>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const SESSION_KEY = 'ucipomon-admin-password';
+
+    const els = {
+      loginCard: document.getElementById('loginCard'),
+      loginForm: document.getElementById('loginForm'),
+      passwordInput: document.getElementById('passwordInput'),
+      loginMessage: document.getElementById('loginMessage'),
+      loginButton: document.getElementById('loginButton'),
+      logoutButton: document.getElementById('logoutButton'),
+      adminArea: document.getElementById('adminArea'),
+
+      questionsPerRound: document.getElementById('questionsPerRound'),
+      saveSettingsButton: document.getElementById('saveSettingsButton'),
+      settingsMessage: document.getElementById('settingsMessage'),
+
+      dropzone: document.getElementById('dropzone'),
+      dropzoneLabel: document.getElementById('dropzoneLabel'),
+      previewImage: document.getElementById('previewImage'),
+      fileInput: document.getElementById('fileInput'),
+      addForm: document.getElementById('addForm'),
+      displayNameInput: document.getElementById('displayNameInput'),
+      aliasesInput: document.getElementById('aliasesInput'),
+      addMessage: document.getElementById('addMessage'),
+      addButton: document.getElementById('addButton'),
+
+      peopleList: document.getElementById('peopleList'),
+      peopleCount: document.getElementById('peopleCount'),
+      peopleEmptyNote: document.getElementById('peopleEmptyNote'),
+    };
+
+    let selectedBlob = null;
+
+    function getPassword() {
+      return sessionStorage.getItem(SESSION_KEY) || '';
+    }
+
+    function authHeaders(extra) {
+      return Object.assign({ 'X-Admin-Password': getPassword() }, extra || {});
+    }
+
+    function showMessage(el, text, kind) {
+      el.textContent = text;
+      el.className = 'message show' + (kind ? ' ' + kind : '');
+    }
+
+    function clearMessage(el) {
+      el.textContent = '';
+      el.className = 'message';
+    }
+
+    // -- Login -----------------------------------------------------------
+
+    async function tryLogin(password) {
+      const res = await fetch('/api/admin/people', { headers: authHeaders() });
+      return res.ok;
+    }
+
+    els.loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearMessage(els.loginMessage);
+      els.loginButton.disabled = true;
+
+      const password = els.passwordInput.value;
+      sessionStorage.setItem(SESSION_KEY, password);
+
+      const ok = await tryLogin(password);
+      els.loginButton.disabled = false;
+
+      if (!ok) {
+        sessionStorage.removeItem(SESSION_KEY);
+        showMessage(els.loginMessage, 'Password incorreta.', 'error');
+        return;
+      }
+
+      enterAdminArea();
+    });
+
+    els.logoutButton.addEventListener('click', () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    });
+
+    async function enterAdminArea() {
+      els.loginCard.hidden = true;
+      els.adminArea.hidden = false;
+      els.logoutButton.hidden = false;
+      await Promise.all([loadSettings(), loadPeople()]);
+    }
+
+    // -- Definições --------------------------------------------------------
+
+    async function loadSettings() {
+      const res = await fetch('/api/settings');
+      const data = await res.json();
+      els.questionsPerRound.value = data.questionsPerRound || 20;
+    }
+
+    els.saveSettingsButton.addEventListener('click', async () => {
+      clearMessage(els.settingsMessage);
+      const n = parseInt(els.questionsPerRound.value, 10);
+      if (!Number.isFinite(n) || n < 1) {
+        showMessage(els.settingsMessage, 'Introduz um número válido.', 'error');
+        return;
+      }
+      els.saveSettingsButton.disabled = true;
+      try {
+        const res = await fetch('/api/admin/settings', {
+          method: 'POST',
+          headers: authHeaders({ 'Content-Type': 'application/json' }),
+          body: JSON.stringify({ questionsPerRound: n }),
+        });
+        if (!res.ok) throw new Error('Falha ao guardar');
+        showMessage(els.settingsMessage, 'Definição guardada.', 'success');
+      } catch (err) {
+        showMessage(els.settingsMessage, 'Não foi possível guardar a definição.', 'error');
+      } finally {
+        els.saveSettingsButton.disabled = false;
+      }
+    });
+
+    // -- Dropzone / imagem --------------------------------------------------
+
+    async function resizeImageFile(file, maxDim, quality) {
+      const bitmap = await createImageBitmap(file);
+      const scale = Math.min(1, maxDim / Math.max(bitmap.width, bitmap.height));
+      const w = Math.max(1, Math.round(bitmap.width * scale));
+      const h = Math.max(1, Math.round(bitmap.height * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+      ctx.drawImage(bitmap, 0, 0, w, h);
+      return await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', quality));
+    }
+
+    async function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      clearMessage(els.addMessage);
+      els.dropzoneLabel.textContent = 'A processar imagem…';
+      try {
+        selectedBlob = await resizeImageFile(file, 900, 0.82);
+        const url = URL.createObjectURL(selectedBlob);
+        els.previewImage.src = url;
+        els.previewImage.hidden = false;
+        els.dropzoneLabel.textContent = 'Imagem pronta — clica para trocar';
+      } catch (err) {
+        els.dropzoneLabel.textContent = 'Não foi possível processar esta imagem. Tenta outra.';
+        selectedBlob = null;
+      }
+    }
+
+    els.dropzone.addEventListener('click', () => els.fileInput.click());
+    els.dropzone.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        els.fileInput.click();
+      }
+    });
+    els.fileInput.addEventListener('change', (event) => handleFile(event.target.files[0]));
+
+    ['dragenter', 'dragover'].forEach((eventName) => {
+      els.dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        els.dropzone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach((eventName) => {
+      els.dropzone.addEventListener(eventName, (event) => {
+        event.preventDefault();
+        els.dropzone.classList.remove('dragover');
+      });
+    });
+    els.dropzone.addEventListener('drop', (event) => {
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      handleFile(file);
+    });
+
+    // -- Adicionar pessoa ----------------------------------------------------
+
+    els.addForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      clearMessage(els.addMessage);
+
+      const displayName = els.displayNameInput.value.trim();
+      if (!selectedBlob) {
+        showMessage(els.addMessage, 'Escolhe uma imagem primeiro.', 'error');
+        return;
+      }
+      if (!displayName) {
+        showMessage(els.addMessage, 'O nome é obrigatório.', 'error');
+        return;
+      }
+
+      els.addButton.disabled = true;
+      try {
+        const form = new FormData();
+        form.append('image', selectedBlob, 'caricatura.jpg');
+        form.append('displayName', displayName);
+        form.append('aliases', els.aliasesInput.value.trim());
+
+        const res = await fetch('/api/admin/people', {
+          method: 'POST',
+          headers: authHeaders(),
+          body: form,
+        });
+        if (!res.ok) throw new Error('Falha ao adicionar');
+
+        showMessage(els.addMessage, `${displayName} foi adicionado(a) com sucesso!`, 'success');
+        els.addForm.reset();
+        selectedBlob = null;
+        els.previewImage.hidden = true;
+        els.dropzoneLabel.textContent = 'Arrasta uma imagem para aqui, ou clica para escolher';
+        await loadPeople();
+      } catch (err) {
+        showMessage(els.addMessage, 'Não foi possível adicionar esta pessoa. Tenta de novo.', 'error');
+      } finally {
+        els.addButton.disabled = false;
+      }
+    });
+
+    // -- Lista de pessoas ------------------------------------------------
+
+    async function loadPeople() {
+      const res = await fetch('/api/admin/people', { headers: authHeaders() });
+      if (!res.ok) return;
+      const data = await res.json();
+      renderPeople(data.people || []);
+    }
+
+    function renderPeople(people) {
+      els.peopleCount.textContent = people.length;
+      els.peopleList.innerHTML = '';
+      els.peopleEmptyNote.hidden = people.length > 0;
+
+      for (const person of people) {
+        const row = document.createElement('div');
+        row.className = 'person-row';
+
+        const img = document.createElement('img');
+        img.src = person.imageUrl;
+        img.alt = '';
+        row.appendChild(img);
+
+        const info = document.createElement('div');
+        info.className = 'person-info';
+
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = person.displayName;
+        nameInput.className = 'person-name-input';
+        info.appendChild(nameInput);
+
+        const aliasesInput = document.createElement('input');
+        aliasesInput.type = 'text';
+        aliasesInput.value = (person.aliases || []).join(', ');
+        aliasesInput.placeholder = 'Também aceitar (separado por vírgulas)';
+        aliasesInput.className = 'person-aliases-input';
+        info.appendChild(aliasesInput);
+
+        row.appendChild(info);
+
+        const actions = document.createElement('div');
+        actions.className = 'person-actions';
+
+        const saveBtn = document.createElement('button');
+        saveBtn.type = 'button';
+        saveBtn.className = 'button secondary';
+        saveBtn.textContent = 'Guardar';
+        saveBtn.addEventListener('click', () => updatePerson(person.id, nameInput.value, aliasesInput.value, saveBtn));
+        actions.appendChild(saveBtn);
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'button secondary';
+        toggleBtn.textContent = person.active ? 'Desativar' : 'Ativar';
+        toggleBtn.addEventListener('click', () => toggleActive(person.id, !person.active, toggleBtn));
+        actions.appendChild(toggleBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'button danger';
+        deleteBtn.textContent = 'Apagar';
+        deleteBtn.addEventListener('click', () => deletePerson(person.id, person.displayName));
+        actions.appendChild(deleteBtn);
+
+        row.appendChild(actions);
+        els.peopleList.appendChild(row);
+      }
+    }
+
+    async function updatePerson(id, displayName, aliasesRaw, button) {
+      button.disabled = true;
+      try {
+        const form = new FormData();
+        form.append('displayName', displayName.trim());
+        form.append('aliases', aliasesRaw.trim());
+        const res = await fetch(`/api/admin/people/${id}`, {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: form,
+        });
+        if (!res.ok) throw new Error('Falha ao guardar');
+        button.textContent = 'Guardado!';
+        setTimeout(() => { button.textContent = 'Guardar'; }, 1500);
+      } catch (err) {
+        button.textContent = 'Erro';
+        setTimeout(() => { button.textContent = 'Guardar'; }, 1500);
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function toggleActive(id, active, button) {
+      button.disabled = true;
+      try {
+        const form = new FormData();
+        form.append('active', active ? 'true' : 'false');
+        const res = await fetch(`/api/admin/people/${id}`, {
+          method: 'PUT',
+          headers: authHeaders(),
+          body: form,
+        });
+        if (!res.ok) throw new Error('Falha');
+        await loadPeople();
+      } catch (err) {
+        button.disabled = false;
+      }
+    }
+
+    async function deletePerson(id, displayName) {
+      if (!confirm(`Apagar ${displayName}? Esta ação não pode ser desfeita.`)) return;
+      try {
+        const res = await fetch(`/api/admin/people/${id}`, {
+          method: 'DELETE',
+          headers: authHeaders(),
+        });
+        if (!res.ok) throw new Error('Falha ao apagar');
+        await loadPeople();
+      } catch (err) {
+        alert('Não foi possível apagar esta pessoa.');
+      }
+    }
+
+    // -- Arranque ---------------------------------------------------------
+
+    (async function init() {
+      if (getPassword()) {
+        const ok = await tryLogin(getPassword());
+        if (ok) {
+          await enterAdminArea();
+          return;
+        }
+        sessionStorage.removeItem(SESSION_KEY);
+      }
+    })();
+  </script>
+</body>
+</html>

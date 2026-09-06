@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UCIP-omon · Quem é este UCIPomon?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+      --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+      --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+      --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      --text-2xl: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+      --space-2: 0.5rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --radius-md: 0.75rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+      --color-bg: #f7f6f2;
+      --color-surface: rgba(255,255,255,0.72);
+      --color-surface-solid: #ffffff;
+      --color-border: rgba(40,37,29,0.12);
+      --color-text: #28251d;
+      --color-text-muted: #6f6b64;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-success: #1a7a3d;
+      --color-success-bg: rgba(26,122,61,0.10);
+      --color-error: #a3312a;
+      --color-error-bg: rgba(163,49,42,0.08);
+      --shadow-lg: 0 18px 40px rgba(30, 26, 20, 0.12);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      color: var(--color-text);
+      background:
+        radial-gradient(circle at top left, rgba(1,105,111,0.16), transparent 35%),
+        radial-gradient(circle at bottom right, rgba(1,105,111,0.12), transparent 30%),
+        linear-gradient(180deg, #fbfaf7 0%, var(--color-bg) 100%);
+      display: grid;
+      place-items: center;
+      padding: var(--space-6);
+    }
+
+    .shell {
+      width: min(100%, 720px);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: 1.5rem;
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    header.top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: var(--space-4) var(--space-6);
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(255,255,255,0.5);
+    }
+
+    header.top a.home {
+      color: var(--color-text-muted);
+      text-decoration: none;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    header.top a.home:hover, header.top a.home:focus-visible {
+      color: var(--color-primary);
+    }
+
+    .title-block {
+      text-align: center;
+      padding: var(--space-6) var(--space-6) 0;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      color: var(--color-text-muted);
+      margin-top: 0.35rem;
+      font-size: var(--text-sm);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+      padding: var(--space-6) var(--space-6) 0;
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      font-weight: 600;
+    }
+
+    .status-row .score {
+      color: var(--color-primary);
+    }
+
+    .progress-track {
+      margin: var(--space-2) var(--space-6) 0;
+      height: 6px;
+      border-radius: var(--radius-full);
+      background: rgba(40,37,29,0.08);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--color-primary);
+      border-radius: var(--radius-full);
+      transition: width 240ms ease;
+      width: 0%;
+    }
+
+    main.quiz-body {
+      padding: var(--space-6);
+      display: grid;
+      gap: var(--space-6);
+    }
+
+    .image-frame {
+      background: var(--color-surface-solid);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      display: grid;
+      place-items: center;
+      min-height: 260px;
+      max-height: min(55vh, 480px);
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(30,26,20,0.08);
+    }
+
+    .image-frame img {
+      max-width: 100%;
+      max-height: min(55vh, 480px);
+      display: block;
+      object-fit: contain;
+    }
+
+    .image-frame .loading {
+      color: var(--color-text-muted);
+      font-size: var(--text-sm);
+    }
+
+    form.guess-form {
+      display: grid;
+      gap: var(--space-4);
+    }
+
+    label.guess-label {
+      font-weight: 700;
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      text-align: center;
+    }
+
+    input.guess-input {
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: var(--text-lg);
+      text-align: center;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--color-border);
+      background: #fff;
+      color: var(--color-text);
+      transition: border-color 160ms ease;
+    }
+    input.guess-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+    }
+    input.guess-input:disabled {
+      background: rgba(40,37,29,0.04);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--space-4);
+    }
+
+    .button {
+      min-width: 150px;
+      min-height: 50px;
+      padding: 0.85rem 1.25rem;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: var(--text-sm);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: transform 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease;
+      font-family: var(--font-body);
+    }
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .button.primary {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 10px 24px rgba(1,105,111,0.22);
+    }
+    .button.primary:hover:not(:disabled), .button.primary:focus-visible:not(:disabled) {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .button.secondary {
+      background: rgba(255,255,255,0.88);
+      color: var(--color-text);
+      border-color: var(--color-border);
+    }
+    .button.secondary:hover:not(:disabled), .button.secondary:focus-visible:not(:disabled) {
+      transform: translateY(-2px);
+      background: #ffffff;
+    }
+
+    .button:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .feedback {
+      text-align: center;
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .feedback.incorrect {
+      background: var(--color-error-bg);
+      color: var(--color-error);
+    }
+    .feedback.info {
+      background: rgba(1,105,111,0.08);
+      color: var(--color-primary);
+    }
+
+    .end-screen {
+      text-align: center;
+      display: grid;
+      gap: var(--space-4);
+      padding: var(--space-4) 0;
+    }
+
+    .end-screen .big-score {
+      font-family: var(--font-display);
+      font-size: var(--text-2xl);
+      color: var(--color-primary);
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--color-text-muted);
+      padding: var(--space-6);
+      line-height: 1.7;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 560px) {
+      .actions { flex-direction: column; }
+      .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <a class="home" href="/">&larr; Início</a>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <div class="title-block">
+      <h1>Quem é este UCIPomon?</h1>
+      <p class="subtitle">Adivinha o nome de quem está na caricatura.</p>
+    </div>
+
+    <div class="status-row" id="statusRow" hidden>
+      <span id="questionCounter">Pergunta 1 de 20</span>
+      <span class="score" id="scoreCounter">Pontos: 0</span>
+    </div>
+    <div class="progress-track" id="progressTrack" hidden>
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <section class="quiz-body" id="quizBody">
+      <div class="image-frame" id="imageFrame">
+        <span class="loading" id="loadingLabel">A carregar caricaturas…</span>
+      </div>
+
+      <form class="guess-form" id="guessForm" hidden>
+        <label class="guess-label" for="guessInput">O teu palpite</label>
+        <input
+          class="guess-input"
+          type="text"
+          id="guessInput"
+          name="guess"
+          autocomplete="off"
+          autocapitalize="words"
+          placeholder="Nome da pessoa"
+        />
+
+        <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+
+        <div class="actions" id="answerActions">
+          <button type="submit" class="button primary" id="submitButton">Responder!</button>
+          <button type="button" class="button secondary" id="giveUpButton">Desisto — ver resposta</button>
+        </div>
+
+        <div class="actions" id="nextActions" hidden>
+          <button type="button" class="button primary" id="nextButton">Pergunta seguinte &rarr;</button>
+        </div>
+      </form>
+
+      <div class="end-screen" id="endScreen" hidden>
+        <p class="subtitle">Fim do jogo!</p>
+        <p class="big-score" id="finalScore">0 / 0</p>
+        <div class="actions">
+          <button type="button" class="button primary" id="playAgainButton">Jogar outra vez</button>
+        </div>
+      </div>
+
+      <div class="empty-state" id="emptyState" hidden>
+        Ainda não há caricaturas no jogo. Pede a um admin para adicionar algumas em
+        <a href="/admin/">/admin</a>.
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      items: [],
+      index: 0,
+      score: 0,
+      locked: false,
+    };
+
+    const els = {
+      statusRow: document.getElementById('statusRow'),
+      progressTrack: document.getElementById('progressTrack'),
+      progressFill: document.getElementById('progressFill'),
+      questionCounter: document.getElementById('questionCounter'),
+      scoreCounter: document.getElementById('scoreCounter'),
+      imageFrame: document.getElementById('imageFrame'),
+      guessForm: document.getElementById('guessForm'),
+      guessInput: document.getElementById('guessInput'),
+      feedback: document.getElementById('feedback'),
+      answerActions: document.getElementById('answerActions'),
+      nextActions: document.getElementById('nextActions'),
+      submitButton: document.getElementById('submitButton'),
+      giveUpButton: document.getElementById('giveUpButton'),
+      nextButton: document.getElementById('nextButton'),
+      endScreen: document.getElementById('endScreen'),
+      finalScore: document.getElementById('finalScore'),
+      playAgainButton: document.getElementById('playAgainButton'),
+      emptyState: document.getElementById('emptyState'),
+    };
+
+    function setFeedback(text, kind) {
+      els.feedback.textContent = text;
+      els.feedback.className = 'feedback show' + (kind ? ' ' + kind : '');
+    }
+
+    function clearFeedback() {
+      els.feedback.textContent = '';
+      els.feedback.className = 'feedback';
+    }
+
+    async function loadRound() {
+      state.items = [];
+      state.index = 0;
+      state.score = 0;
+      state.locked = false;
+
+      els.statusRow.hidden = true;
+      els.progressTrack.hidden = true;
+      els.guessForm.hidden = true;
+      els.endScreen.hidden = true;
+      els.emptyState.hidden = true;
+      els.imageFrame.innerHTML = '<span class="loading">A carregar caricaturas…</span>';
+
+      try {
+        const res = await fetch('/api/quiz');
+        const data = await res.json();
+        state.items = data.items || [];
+      } catch (err) {
+        els.imageFrame.innerHTML = '<span class="loading">Não foi possível carregar o jogo. Tenta recarregar a página.</span>';
+        return;
+      }
+
+      if (state.items.length === 0) {
+        els.emptyState.hidden = false;
+        els.imageFrame.innerHTML = '';
+        return;
+      }
+
+      els.statusRow.hidden = false;
+      els.progressTrack.hidden = false;
+      els.guessForm.hidden = false;
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const total = state.items.length;
+      const current = state.items[state.index];
+
+      els.questionCounter.textContent = `Pergunta ${state.index + 1} de ${total}`;
+      els.scoreCounter.textContent = `Pontos: ${state.score}`;
+      els.progressFill.style.width = `${Math.round((state.index / total) * 100)}%`;
+
+      els.imageFrame.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = current.imageUrl;
+      img.alt = 'Caricatura para adivinhar';
+      els.imageFrame.appendChild(img);
+
+      clearFeedback();
+      els.guessInput.value = '';
+      els.guessInput.disabled = false;
+      state.locked = false;
+
+      els.answerActions.hidden = false;
+      els.nextActions.hidden = true;
+      els.submitButton.disabled = false;
+      els.giveUpButton.disabled = false;
+
+      els.guessInput.focus();
+    }
+
+    function lockQuestion() {
+      state.locked = true;
+      els.guessInput.disabled = true;
+      els.answerActions.hidden = true;
+      els.nextActions.hidden = false;
+      els.nextButton.focus();
+    }
+
+    async function submitGuess(event) {
+      event.preventDefault();
+      if (state.locked) return;
+
+      const guess = els.guessInput.value.trim();
+      if (!guess) {
+        setFeedback('Escreve um palpite antes de responder.', 'info');
+        return;
+      }
+
+      els.submitButton.disabled = true;
+      const current = state.items[state.index];
+
+      try {
+        const res = await fetch('/api/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: current.id, guess }),
+        });
+        const data = await res.json();
+
+        if (data.correct) {
+          state.score += 1;
+          els.scoreCounter.textContent = `Pontos: ${state.score}`;
+          const answer = await revealAnswer(current.id);
+          setFeedback(answer ? `Correto! Era ${answer}.` : 'Correto!', 'correct');
+          lockQuestion();
+        } else {
+          setFeedback('Não é essa. Tenta outra vez!', 'incorrect');
+          els.submitButton.disabled = false;
+          els.guessInput.focus();
+          els.guessInput.select();
+        }
+      } catch (err) {
+        setFeedback('Não foi possível verificar a resposta. Tenta de novo.', 'incorrect');
+        els.submitButton.disabled = false;
+      }
+    }
+
+    async function revealAnswer(id) {
+      try {
+        const res = await fetch('/api/reveal', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id }),
+        });
+        const data = await res.json();
+        return data.answer || null;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    async function giveUp() {
+      if (state.locked) return;
+      els.giveUpButton.disabled = true;
+      const current = state.items[state.index];
+      const answer = await revealAnswer(current.id);
+      setFeedback(answer ? `A resposta era: ${answer}.` : 'Não foi possível obter a resposta.', 'info');
+      lockQuestion();
+    }
+
+    function goNext() {
+      state.index += 1;
+      if (state.index >= state.items.length) {
+        showEndScreen();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function showEndScreen() {
+      els.statusRow.hidden = true;
+      els.progressTrack.hidden = true;
+      els.guessForm.hidden = true;
+      els.endScreen.hidden = false;
+      els.imageFrame.innerHTML = '';
+      els.finalScore.textContent = `${state.score} / ${state.items.length}`;
+      els.playAgainButton.focus();
+    }
+
+    els.guessForm.addEventListener('submit', submitGuess);
+    els.giveUpButton.addEventListener('click', giveUp);
+    els.nextButton.addEventListener('click', goNext);
+    els.playAgainButton.addEventListener('click', loadRound);
+
+    loadRound();
+  </script>
+</body>
+</html>
